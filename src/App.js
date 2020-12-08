@@ -1,18 +1,39 @@
-import React from 'react';
+import React from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Grommet } from "grommet";
+import { grommet } from "grommet/themes";
+import {
+  Header,
+  Error,
+  Home,
+  Explore,
+  Profile,
+  Feed,
+  Login,
+  // Footer,
+} from "./components";
+import "./App.css";
 
-function App() {
+export default function App() {
   return (
-    <div style={{ textAlign: 'center' }}>
-      <header>
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Grommet theme={grommet}>
+      <Router>
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route exact path="/login" component={Login} />
+          <Route path={["/feed", "/explore", "/profile"]}>
+            <Header />
+            <Switch>
+              <Route exact path="/feed" component={Feed} />
+              <Route exact path="/explore" component={Explore} />
+              <Route exact path="/profile" component={Profile} />
+            </Switch>
+          </Route>
+          <Route component={Error} />
+        </Switch>
+      </Router>
+
+      {/* <Footer /> */}
+    </Grommet>
   );
 }
-
-export default App;
