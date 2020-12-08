@@ -1,11 +1,19 @@
 import React from "react";
-import { Anchor } from "grommet";
-
+import { Header as GrommetHeader, Heading, Button } from "grommet";
 export default function Home() {
   return (
     <div>
-      This is the homepage
-      <Anchor href="/login" label="Login" />
+      <GrommetHeader background="brand">
+        <Heading>Qwhiz</Heading>
+        <div>
+          <Button href="/signup" label="Sign Up" margin={{ right: "2vw" }} />
+          <Button href="/login" label="Log In" />
+        </div>
+      </GrommetHeader>
+      <Heading textAlign="center">
+        This is the homepage for Qwhiz, a social media platform that promotes
+        interaction through quizzes!
+      </Heading>
     </div>
   );
 }

@@ -6,3 +6,4 @@ export { default as Explore } from "./Explore";
 export { default as Error } from "./Error";
 export { default as Feed } from "./Feed";
 export { default as Login } from "./Login";
+export { default as Signup } from "./Signup";

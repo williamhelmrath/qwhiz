@@ -10,6 +10,7 @@ import {
   Profile,
   Feed,
   Login,
+  Signup,
   // Footer,
 } from "./components";
 import "./App.css";
@@ -21,6 +22,7 @@ export default function App() {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
+          <Route exact path="/signup" component={Signup} />
           <Route path={["/feed", "/explore", "/profile"]}>
             <Header />
             <Switch>
