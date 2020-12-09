@@ -11,6 +11,7 @@ import {
   Feed,
   Login,
   Signup,
+  QuizPage,
   // Footer,
 } from "./components";
 import "./App.css";
@@ -23,12 +24,13 @@ export default function App() {
           <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={Signup} />
-          <Route path={["/feed", "/explore", "/profile"]}>
+          <Route path={["/feed", "/explore", "/profile", "/quiz"]}>
             <Header />
             <Switch>
               <Route exact path="/feed" component={Feed} />
               <Route exact path="/explore" component={Explore} />
               <Route exact path="/profile" component={Profile} />
+              <Route exact path="/quiz/:id" component={QuizPage} />
             </Switch>
           </Route>
           <Route component={Error} />
