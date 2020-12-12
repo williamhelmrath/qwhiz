@@ -1,18 +1,17 @@
 import React, { useState } from "react";
 import { Box, Heading, Text } from "grommet";
 
-export default function Quiz({ quiz }) {
-  const [answers, setAnswers] = useState([]);
+export default function PersonalityQuiz({ quiz }) {
+  const [answers, setAnswers] = useState(
+    Array(quiz.questions.length).fill(null)
+  );
   const [result, setResult] = useState();
 
   const handleSubmit = () => {
-    if (
-      answers.includes(null) ||
-      answers.includes(undefined) ||
-      answers.length !== quiz.questions.length
-    )
-      alert("Please answer all of the questions.");
+    if (answers.includes(null)) alert("Please answer all of the questions.");
     else {
+      // Set result equal to the corresponding result that was selected the most
+      // (In case of a tie, whichever result is first alphabetically will be chosen)
       const sorted = answers.map((ans) => ans.correspondsTo).sort();
       console.log(sorted);
       let mode = sorted[0];

@@ -1,11 +1,78 @@
-import React from "react";
-import { Button } from "grommet";
+import React, { useState } from "react";
+import { TextInput, Form, Button, Box, Heading, FormField } from "grommet";
+import { useHistory } from "react-router-dom";
+import firebase from "../utils/firebase";
+
+const auth = firebase.auth();
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({ email: "", password: "" });
+
+  const history = useHistory();
+
+  const handleSubmit = async () => {
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .then(() => history.push("/feed"))
+      .catch((error) => {
+        switch (error.code) {
+          case "auth/invalid-email":
+            setErrors({ password: "", email: error.message });
+            break;
+          case "auth/wrong-password":
+            setErrors({ email: "", password: error.message });
+            break;
+          default:
+            alert(error.message);
+        }
+      });
+  };
   return (
-    <div>
-      This is the login page
-      <Button href="/feed" label="Log in" />
-    </div>
+    <Form
+      onSubmit={handleSubmit}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        marginTop: "10vh",
+      }}
+    >
+      <Box
+        width={{ width: "30vw", min: "200px", max: "30vw" }}
+        flex
+        align="center"
+        gap="small"
+        border={{ color: "gray", size: "small" }}
+        round="xsmall"
+        pad="small"
+      >
+        <Heading>Qwhiz</Heading>
+        <Heading level={4} textAlign="center">
+          Log in to create and take quizzes with your friends.
+        </Heading>
+        <FormField error={errors.email} style={{ maxWidth: "max-content" }}>
+          <TextInput
+            name="email"
+            placeholder="Email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </FormField>
+        <FormField error={errors.password}>
+          <TextInput
+            name="password"
+            type="password"
+            placeholder="Password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </FormField>
+        <Button
+          type="submit"
+          label="Log in"
+          disabled={email === "" || password === ""}
+        />
+      </Box>
+    </Form>
   );
 }

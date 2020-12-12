@@ -14,11 +14,14 @@ import {
   QuizPage,
   // Footer,
 } from "./components";
+// import { AuthProvider } from "./components/AuthContext";
+
 import "./App.css";
 
 export default function App() {
   return (
     <Grommet theme={grommet}>
+      {/* <AuthProvider> */}
       <Router>
         <Switch>
           <Route exact path="/" component={Home} />
@@ -36,7 +39,7 @@ export default function App() {
           <Route component={Error} />
         </Switch>
       </Router>
-
+      {/* </AuthProvider> */}
       {/* <Footer /> */}
     </Grommet>
   );
