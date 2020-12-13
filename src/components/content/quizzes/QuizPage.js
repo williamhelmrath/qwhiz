@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import firebase from "../../../utils/firebase";
 import { Main } from "grommet";
 import PersonalityQuiz from "./PersonalityQuiz";
+import { Error } from "../../error";
 
 const db = firebase.firestore();
 
@@ -13,10 +14,16 @@ export default function QuizPage({ match }) {
       .doc(match.params.id)
       .get()
       .then((res) => {
-        setQuiz(res.data());
+        if (!res.data()) setQuiz("error");
+        else setQuiz(res.data());
+      })
+      .catch((error) => {
+        console.log(error);
       });
   }, [match.params.id]);
   if (!quiz) return <div></div>;
+
+  if (quiz === "error") return <Error />;
 
   if (quiz.type === "personality")
     return (
