@@ -1,8 +1,16 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, useHistory } from "react-router-dom";
 import { Header, Feed, Explore, Profile, QuizPage } from "./";
+import { useAuthContext } from "../AuthContext";
 
 export default function Router() {
+  const history = useHistory();
+  const { authenticated } = useAuthContext();
+  if (authenticated === false) {
+    history.push("/");
+    return <></>;
+  }
+
   return (
     <div>
       <Header />
