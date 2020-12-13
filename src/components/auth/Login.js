@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { TextInput, Form, Button, Box, Heading, FormField } from "grommet";
 import { useHistory } from "react-router-dom";
-import firebase from "../utils/firebase";
+import firebase from "../../utils/firebase";
 
 const auth = firebase.auth();
-const db = firebase.firestore();
 
-export default function Signup() {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: "", password: "" });
@@ -14,27 +13,21 @@ export default function Signup() {
   const history = useHistory();
 
   const handleSubmit = async () => {
-    await auth
-      .createUserWithEmailAndPassword(email, password)
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .then(() => history.push("/feed"))
       .catch((error) => {
         switch (error.code) {
           case "auth/invalid-email":
-          case "auth/email-already-in-use":
             setErrors({ password: "", email: error.message });
             break;
-          case "auth/weak-password":
+          case "auth/wrong-password":
             setErrors({ email: "", password: error.message });
             break;
           default:
             alert(error.message);
         }
       });
-
-    db.collection("users")
-      .doc(auth.currentUser.uid)
-      .set({ uid: auth.currentUser.uid });
-
-    history.push("/feed");
   };
   return (
     <Form
@@ -57,7 +50,7 @@ export default function Signup() {
       >
         <Heading>Qwhiz</Heading>
         <Heading level={4} textAlign="center">
-          Sign up to create and take quizzes with your friends.
+          Log in to create and take quizzes with your friends.
         </Heading>
         <FormField error={errors.email} style={{ maxWidth: "max-content" }}>
           <TextInput
@@ -69,13 +62,14 @@ export default function Signup() {
         <FormField error={errors.password}>
           <TextInput
             name="password"
+            type="password"
             placeholder="Password"
             onChange={(e) => setPassword(e.target.value)}
           />
         </FormField>
         <Button
           type="submit"
-          label="Sign up"
+          label="Log in"
           disabled={email === "" || password === ""}
         />
       </Box>

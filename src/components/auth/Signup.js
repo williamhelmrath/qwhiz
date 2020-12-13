@@ -1,33 +1,45 @@
 import React, { useState } from "react";
 import { TextInput, Form, Button, Box, Heading, FormField } from "grommet";
 import { useHistory } from "react-router-dom";
-import firebase from "../utils/firebase";
+import firebase from "../../utils/firebase";
+import { useAuthContext } from "../AuthContext";
 
 const auth = firebase.auth();
+const db = firebase.firestore();
 
-export default function Login() {
+export default function Signup() {
+  const history = useHistory();
+  const { authenticated } = useAuthContext();
+  if (authenticated) {
+    history.push("/feed");
+  }
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: "", password: "" });
 
-  const history = useHistory();
-
   const handleSubmit = async () => {
-    auth
-      .signInWithEmailAndPassword(email, password)
-      .then(() => history.push("/feed"))
+    await auth
+      .createUserWithEmailAndPassword(email, password)
       .catch((error) => {
         switch (error.code) {
           case "auth/invalid-email":
+          case "auth/email-already-in-use":
             setErrors({ password: "", email: error.message });
             break;
-          case "auth/wrong-password":
+          case "auth/weak-password":
             setErrors({ email: "", password: error.message });
             break;
           default:
             alert(error.message);
         }
       });
+
+    db.collection("users")
+      .doc(auth.currentUser.uid)
+      .set({ uid: auth.currentUser.uid });
+
+    history.push("/feed");
   };
   return (
     <Form
@@ -50,7 +62,7 @@ export default function Login() {
       >
         <Heading>Qwhiz</Heading>
         <Heading level={4} textAlign="center">
-          Log in to create and take quizzes with your friends.
+          Sign up to create and take quizzes with your friends.
         </Heading>
         <FormField error={errors.email} style={{ maxWidth: "max-content" }}>
           <TextInput
@@ -62,14 +74,13 @@ export default function Login() {
         <FormField error={errors.password}>
           <TextInput
             name="password"
-            type="password"
             placeholder="Password"
             onChange={(e) => setPassword(e.target.value)}
           />
         </FormField>
         <Button
           type="submit"
-          label="Log in"
+          label="Sign up"
           disabled={email === "" || password === ""}
         />
       </Box>

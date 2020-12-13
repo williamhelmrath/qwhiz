@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Main, Heading, Anchor } from "grommet";
-import firebase from "../utils/firebase";
+import firebase from "../../utils/firebase";
 
 const db = firebase.firestore();
 
