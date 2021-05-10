@@ -22,7 +22,7 @@ export default function App() {
             />
             <Route
               exact
-              path={["/feed", "/explore", "/profile", "/quiz/:id"]}
+              path={["/feed", "/explore", "/profile", "/quiz/:id", "/post"]}
               component={ContentRouter}
             />
             <Route component={Error} />
